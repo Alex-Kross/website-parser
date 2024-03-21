@@ -17,19 +17,20 @@ import java.util.regex.Pattern;
 
 public class ContentHtmlParser {
     private String mainUrl = "https://www.electromarket.by";
-    private static Map<TypeProduct, List<Product>> products = new HashMap<>();
+    private Map<TypeProduct, List<Product>> products = new HashMap<>();
 
-    public static Map<TypeProduct, List<Product>> getProducts() {
+    public Map<TypeProduct, List<Product>> getProducts() {
         return products;
     }
 
-    public void parseMouseSection(String url) throws IOException {
+    public void parseMouseSection(TypeProduct typeProduct, String url) throws IOException {
         List<Product> productList = new ArrayList<>();
         Document doc = Jsoup.connect(url).get();
 
         // get links with web pages
         Elements pagesEl = doc.getElementsByClass("w100 clearfix");
         Elements linkToPages = pagesEl.get(0).getElementsByTag("a");
+//        TODO: Учесть, что страниц может быть больше 10 и они не все отображаются
         // remove
         linkToPages.remove(linkToPages.size() - 1);
         for (Element link : linkToPages) {
@@ -61,15 +62,6 @@ public class ContentHtmlParser {
                 productList.add(product);
             }
         }
-
-        // choose what product will be add
-        String[] split = url.split("/");
-        if (split[split.length - 1].equals("mouse")) {
-            products.put(TypeProduct.MOUSE, productList);
-        } else if (split[split.length - 1].equals("toaster")) {
-            products.put(TypeProduct.TOASTER, productList);
-        } else if (split[split.length - 1].equals("electricgrill")) {
-            products.put(TypeProduct.ELECTRIC_GRILL, productList);
-        }
+        products.put(typeProduct, productList);
     }
 }

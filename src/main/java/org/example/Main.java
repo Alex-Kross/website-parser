@@ -1,4 +1,5 @@
 package org.example;
+import org.example.entity.TypeProduct;
 import org.example.service.ContentHtmlParser;
 import org.example.service.ContentSaver;
 
@@ -9,15 +10,16 @@ public class Main {
         String mouseUrl = "https://www.electromarket.by/mouse";
         String toasterUrl = "https://www.electromarket.by/toaster";
         String elecGrillUrl = "https://www.electromarket.by/electricgrill";
+        String fileName = "src/main/resources/Content.xlsx";
 
         //parse html page
         ContentHtmlParser contentHtmlParser = new ContentHtmlParser();
-        contentHtmlParser.parseMouseSection(mouseUrl);
-        contentHtmlParser.parseMouseSection(toasterUrl);
-        contentHtmlParser.parseMouseSection(elecGrillUrl);
+        contentHtmlParser.parseMouseSection(TypeProduct.MOUSE, mouseUrl);
+        contentHtmlParser.parseMouseSection(TypeProduct.TOASTER,toasterUrl);
+        contentHtmlParser.parseMouseSection(TypeProduct.ELECTRIC_GRILL,elecGrillUrl);
 
         //save content
         ContentSaver contentSaver = new ContentSaver();
-        contentSaver.saveProduct(ContentHtmlParser.getProducts());
+        contentSaver.saveProducts(contentHtmlParser.getProducts(), fileName);
     }
 }

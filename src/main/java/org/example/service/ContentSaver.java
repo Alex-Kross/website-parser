@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ContentSaver {
-    private static final String FILE_NAME = "src/main/resources/Content.xlsx";
-    private static XSSFWorkbook workbook = new XSSFWorkbook();
-    public void saveProduct(Map<TypeProduct, List<Product>> products){
+    public void saveProducts(Map<TypeProduct, List<Product>> products, String filename) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
         for (Map.Entry<TypeProduct, List<Product>> product : products.entrySet()) {
             // create sheet
             XSSFSheet sheet = workbook.createSheet(product.getKey().name());
@@ -29,15 +29,13 @@ public class ContentSaver {
                 int colNum = 0;
                 for (int i = 0; i < attributes.length; i++) {
                     Cell cell = row.createCell(colNum++);
-                    if (attributes[i] instanceof String)
-                        cell.setCellValue((String) attributes[i]);
-                    else if (attributes[i] instanceof Double)
-                        cell.setCellValue((Double) attributes[i]);
+                    if (attributes[i] instanceof String) cell.setCellValue((String) attributes[i]);
+                    else if (attributes[i] instanceof Double) cell.setCellValue((Double) attributes[i]);
                 }
             }
         }
         try {
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(filename);
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
